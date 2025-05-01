@@ -1,38 +1,42 @@
 package crosswordjava;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-/**
- * JavaFX App
- */
+//Runnable JavaFX application
 public class App extends Application {
 
-    private static Scene scene;
+    private static Stage primaryStage;
+    private static GameView gameView;
+    private static HelpView helpView;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 800, 455);
+    public void start(Stage stage) {
+        primaryStage = stage;
+
+        // Create views
+        gameView = new GameView();
+        helpView = new HelpView();
+
+        // Set initial scene
+        Scene scene = new Scene(gameView.getRoot(), 800, 455);
+        stage.setTitle("Crossword Puzzle Game");
         stage.setScene(scene);
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    public static void switchToGame() {
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(gameView.getRoot());
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+    public static void switchToHelp() {
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(helpView.getRoot());
     }
 
     public static void main(String[] args) {
         launch();
     }
-
 }
