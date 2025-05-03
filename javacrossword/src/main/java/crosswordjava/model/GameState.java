@@ -17,6 +17,9 @@ public class GameState {
     private int gridSize;
     private Random random;
     private Set<String> usedWords; // Track used words to prevent duplicates
+    private int wordTarget = 20; // Default medium difficulty
+    private int backtrackingDepthLimit = 300; // Default backtracking depth for medium difficulty
+    private int minRequiredWords = 4; // Minimum words to generate a valid puzzle
 
     /**
      * Creates a new game state with the specified grid size.
@@ -30,6 +33,13 @@ public class GameState {
         this.dictionary = new Dictionary();
         this.random = new Random();
         this.usedWords = new HashSet<>();
+    }
+
+    // Set difficulty parameters for the game
+    public void setDifficultyParameters(int wordTarget, int depthLimit, int minWords) {
+        this.wordTarget = wordTarget;
+        this.backtrackingDepthLimit = depthLimit;
+        this.minRequiredWords = minWords;
     }
 
     /**
@@ -73,7 +83,7 @@ public class GameState {
                 wordNumber++;
 
                 // Stop if we have enough words
-                if (words.size() >= 10) {
+                if (words.size() >= minRequiredWords) {
                     break;
                 }
             }
@@ -443,11 +453,11 @@ public class GameState {
 
     private boolean backtrackPlaceWords(int wordNumber, int depth) {
         // Termination conditions
-        if (words.size() >= 12) { // Increased from 10 to 12 for more words
+        if (words.size() >= wordTarget) { // Increased from 12 to 20 for more words
             return true; // Success - we've placed enough words
         }
 
-        if (depth > 150) { // Increased from 100 to 150 for more attempts
+        if (depth > backtrackingDepthLimit) { // Increased from 150 to 300 for more attempts
             return false; // Prevent excessive recursion
         }
 
