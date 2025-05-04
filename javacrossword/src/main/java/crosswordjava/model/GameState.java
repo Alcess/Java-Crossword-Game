@@ -21,6 +21,7 @@ public class GameState {
     private int backtrackingDepthLimit = 300; // Default backtracking depth for medium difficulty
     private int minRequiredWords = 4; // Minimum words to generate a valid puzzle
     private int health = 30; // Default health for player
+    private int availableHints = 10; // Number of hints per game
 
     /**
      * Creates a new game state with the specified grid size.
@@ -35,10 +36,36 @@ public class GameState {
         this.random = new Random();
         this.usedWords = new HashSet<>();
         this.health = 30;
+
     }
 
+    // Resets the health of the player
     public void resetHealth() {
         this.health = 30; // resets health back to 30
+    }
+
+    // Sets the number of hints available for the game
+    public void resetHints() {
+        // Reset hints based on difficulty level
+        if (wordTarget <= 10) {
+            this.availableHints = 15; // Easy difficulty
+        } else if (wordTarget <= 20) {
+            this.availableHints = 10; // Medium Difficulty
+        } else {
+            this.availableHints = 8; // Hard Difficulty
+        }
+    }
+
+    public int getAvailableHints() {
+        return availableHints; // returns the number of hints available
+    }
+
+    public boolean useHint() {
+        if (this.availableHints > 0) {
+            this.availableHints--; // Reduces available hint by 1
+            return true;
+        }
+        return false;
     }
 
     public int decreaseHealth(int amount) {
